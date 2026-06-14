@@ -233,6 +233,175 @@
       color: #8a1f1f;
       font-weight: 700;
     }
+
+    /* 모바일 반응형 디자인 */
+    @media screen and (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+
+      .container {
+        padding: 20px 16px;
+        border-radius: 18px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+      }
+
+      p.description {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .section h2 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+      }
+
+      .actions {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+      }
+
+      .small-button {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 0.95rem;
+      }
+
+      .info-box {
+        width: 100%;
+        min-width: auto;
+        font-size: 0.85rem;
+        padding: 14px 16px;
+        line-height: 1.6;
+      }
+
+      /* 테이블을 모바일에서 카드 형식으로 변환 */
+      .table-wrapper {
+        overflow-x: visible;
+      }
+
+      table {
+        min-width: 100%;
+        display: block;
+        border: none;
+        border-radius: 0;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tbody {
+        display: grid;
+        gap: 12px;
+      }
+
+      tr {
+        display: grid;
+        grid-template-columns: 1fr;
+        background: rgba(237, 221, 188, 0.92);
+        border: 1px solid rgba(117, 87, 56, 0.24);
+        border-radius: 14px;
+        overflow: hidden;
+        padding: 0;
+        box-shadow: 0 2px 8px rgba(65, 44, 18, 0.1);
+      }
+
+      td {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border-bottom: none;
+        border-right: none;
+      }
+
+      td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #4b3823;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+
+      td:last-child {
+        grid-template-columns: 1fr;
+        padding-top: 8px;
+        border-top: 1px solid rgba(77, 55, 38, 0.08);
+      }
+
+      td:last-child::before {
+        display: none;
+      }
+
+      td input {
+        min-width: auto;
+        font-size: 0.9rem;
+        padding: 10px 12px;
+      }
+
+      td button {
+        width: 100%;
+        padding: 12px;
+        font-size: 0.9rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field input {
+        font-size: 16px;
+      }
+
+      /* 결과 테이블 모바일 최적화 */
+      #resultsTable tbody tr {
+        grid-template-columns: 1fr;
+      }
+
+      #resultsTable td {
+        grid-template-columns: 70px 1fr;
+        gap: 8px;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+      }
+
+      #resultsTable td:nth-child(n+2) {
+        display: grid;
+      }
+    }
+
+    /* 태블릿 해상도 최적화 */
+    @media screen and (max-width: 1024px) and (min-width: 769px) {
+      .container {
+        padding: 30px 24px;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .small-button {
+        width: 100%;
+      }
+
+      .info-box {
+        width: 100%;
+        min-width: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -322,12 +491,12 @@
     function createFamilyRow(family = {}) {
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td><input type="text" class="family-name" placeholder="대표자 이름" value="${family.name || ''}" /></td>
-        <td><input type="number" class="family-adults" min="0" value="${family.adults ?? 0}" /></td>
-        <td><input type="number" class="family-children" min="0" value="${family.children ?? 0}" step="0.5" /></td>
-        <td><input type="number" class="family-nights" min="1" value="${family.nights ?? 1}" /></td>
-        <td><input type="number" class="family-usage" min="0" value="${family.usage ?? 0}" /></td>
-        <td><button type="button" class="remove-button">삭제</button></td>
+        <td data-label="대표자 이름"><input type="text" class="family-name" placeholder="대표자 이름" value="${family.name || ''}" /></td>
+        <td data-label="어른"><input type="number" class="family-adults" min="0" value="${family.adults ?? 0}" /></td>
+        <td data-label="아이"><input type="number" class="family-children" min="0" value="${family.children ?? 0}" step="0.5" /></td>
+        <td data-label="체류일수"><input type="number" class="family-nights" min="1" value="${family.nights ?? 1}" /></td>
+        <td data-label="사용액(원)"><input type="number" class="family-usage" min="0" value="${family.usage ?? 0}" /></td>
+        <td data-label="액션"><button type="button" class="remove-button">삭제</button></td>
       `;
 
       const removeButton = row.querySelector('.remove-button');
@@ -410,14 +579,14 @@
 
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${family.name}</td>
-          <td>${family.adults}</td>
-          <td>${family.children}</td>
-          <td>${family.nights}</td>
-          <td>${formatWon(family.usage)}</td>
-          <td>${(shareRatio * 100).toFixed(1)}%</td>
-          <td><strong>${formatWon(shareAmount)}</strong></td>
-          <td><strong class="${difference >= 0 ? 'positive' : 'negative'}">${formatWon(difference)}</strong></td>
+          <td data-label="대표자">${family.name}</td>
+          <td data-label="어른">${family.adults}</td>
+          <td data-label="아이">${family.children}</td>
+          <td data-label="체류일수">${family.nights}</td>
+          <td data-label="사용액(원)">${formatWon(family.usage)}</td>
+          <td data-label="분담 비율">${(shareRatio * 100).toFixed(1)}%</td>
+          <td data-label="분담금액(원)"><strong>${formatWon(shareAmount)}</strong></td>
+          <td data-label="차액(원)"><strong class="${difference >= 0 ? 'positive' : 'negative'}">${formatWon(difference)}</strong></td>
         `;
         resultRows.appendChild(row);
       });
